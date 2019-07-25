@@ -2,7 +2,7 @@ import express from 'express';
 import { SERVER_PORT } from '../global/enviroment';
 import socketIO from 'socket.io';
 import http from 'http';
-
+import * as socket from '../sockets/socket';
 //para que sea paquete por defecto
 export default class Server{
 
@@ -31,12 +31,20 @@ export default class Server{
     private listenSockets(){
         console.log('Escuchando conexiones de sockets');
         //para escuchar algun evento
-        this.io.on('connection',cliente=>{
+        //tiende a crecer mucho por que lleva toda la logica de los eventos sin el folder socket
+        this.io.on('connection',client=>{
+        
             console.log('cliente conectado');
+            //mensajes
+            socket.message(client),
+            //desconectar
+            socket.disconnect(client);
+         
         });
     }
 
     start(callback: Function){
         this.httpServer.listen(this.port, callback());
+        
     }
 }
