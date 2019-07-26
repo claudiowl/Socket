@@ -20,6 +20,8 @@ export default class Server{
         this.port= SERVER_PORT;
         this.httpServer= new http.Server(this.app);
         //no se puede utilizar el app de express
+        //this.io es el servidor de socket
+        
         this.io=socketIO(this.httpServer);
         this.listenSockets();
     }
@@ -36,7 +38,7 @@ export default class Server{
         
             console.log('cliente conectado');
             //mensajes
-            socket.message(client),
+            socket.message(client,this.io),
             //desconectar
             socket.disconnect(client);
          
